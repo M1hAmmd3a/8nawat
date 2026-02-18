@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#07090f">
+<title>StreamHub — دليل القنوات العالمي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+/* ================================
+   STREAMHUB — GLOBAL STYLES
+   ================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+
+:root{
+  --bg:#07090f;
+  --bg2:#0d1017;
+  --sport-a:#ff6b35;--sport-b:#ff006e;
+  --drama-a:#8338ec;--drama-b:#c77dff;
+  --action-a:#3a86ff;--action-b:#00b4d8;
+  --misc-a:#06d6a0;--misc-b:#ffd60a;
+  --text:#f0f4ff;--dim:#7a85a3;
+  --card-bg:rgba(13,16,23,.92);
+  --border:rgba(255,255,255,.07);
+  --radius-card:22px;
+  --radius-btn:50px;
+  --shadow-lg:0 32px 64px rgba(0,0,0,.6);
+  --font-display:'Bebas Neue',sans-serif;
+  --font-body:'Cairo',sans-serif;
+  --transition:all .3s cubic-bezier(.16,1,.3,1);
+}
+
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);overflow-x:hidden;cursor:none}
+
+/* CURSOR — hidden on touch devices */
+.cursor,
+.cursor-ring{display:none}
+
+@media(pointer:fine){
+  .cursor{
+    display:block;
+    position:fixed;width:10px;height:10px;border-radius:50%;
+    background:#fff;pointer-events:none;z-index:9999;
+    transform:translate(-50%,-50%);mix-blend-mode:difference;
+    transition:transform .15s ease;
+  }
+  .cursor-ring{
+    display:block;
+    position:fixed;width:34px;height:34px;border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.35);pointer-events:none;
+    z-index:9998;transform:translate(-50%,-50%);
+    transition:left .1s ease,top .1s ease,width .3s,height .3s,border-color .3s;
+    mix-blend-mode:difference;
+  }
+  body{cursor:none}
+}
+
+/* ================================
+   BACKGROUND MESH
+   ================================ */
+.mesh{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.blob{position:absolute;border-radius:50%;filter:blur(140px);opacity:.09;animation:drift 20s infinite alternate ease-in-out}
+.b1{width:min(900px,120vw);height:min(900px,120vw);background:radial-gradient(#ff006e,#8338ec);top:-30%;right:-20%;animation-duration:18s}
+.b2{width:min(750px,110vw);height:min(750px,110vw);background:radial-gradient(#3a86ff,#06d6a0);bottom:-20%;left:-20%;animation-duration:22s;animation-delay:-6s}
+.b3{width:min(550px,90vw);height:min(550px,90vw);background:radial-gradient(#ffd60a,#ff6b35);top:40%;left:40%;animation-duration:16s;animation-delay:-10s}
+
+@keyframes drift{0%{transform:translate(0,0) scale(1)}100%{transform:translate(60px,40px) scale(1.15)}}
+
+.gridline{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:64px 64px;
+}
+
+/* ================================
+   HEADER
+   ================================ */
+header{
+  position:fixed;top:0;width:100%;z-index:1000;
+  padding:0 2rem;
+  backdrop-filter:blur(20px);
+  background:rgba(7,9,15,.7);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.hdr{
+  max-width:1500px;margin:0 auto;height:70px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+
+/* LOGO */
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.logo-icon{
+  width:42px;height:42px;border-radius:12px;
+  background:linear-gradient(135deg,#ff6b35,#ff006e,#8338ec);
+  display:flex;align-items:center;justify-content:center;font-size:1.2rem;
+  box-shadow:0 4px 20px rgba(255,107,53,.4);flex-shrink:0;
+}
+.logo-name{
+  font-family:var(--font-display);font-size:1.8rem;letter-spacing:3px;
+  background:linear-gradient(135deg,#ff6b35,#ff006e,#8338ec);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  display:block;line-height:1;
+}
+.logo-sub{
+  font-size:.58rem;color:var(--dim);letter-spacing:2px;
+  text-transform:uppercase;display:block;margin-top:2px;
+}
+
+/* NAV */
+.hdr-nav{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:var(--radius-btn);padding:4px;display:flex;gap:2px;
+  backdrop-filter:blur(20px);
+}
+
+.hn{
+  padding:8px 16px;border-radius:var(--radius-btn);
+  text-decoration:none;font-size:.78rem;font-weight:700;
+  color:var(--dim);transition:var(--transition);position:relative;overflow:hidden;
+  letter-spacing:.3px;white-space:nowrap;
+}
+.hn span{position:relative;z-index:1}
+.hn::before{content:'';position:absolute;inset:0;border-radius:var(--radius-btn);opacity:0;transition:opacity .3s}
+.hn.hs::before{background:linear-gradient(135deg,var(--sport-a),var(--sport-b))}
+.hn.hd::before{background:linear-gradient(135deg,var(--drama-a),var(--drama-b))}
+.hn.ha::before{background:linear-gradient(135deg,var(--action-a),var(--action-b))}
+.hn.hm::before{background:linear-gradient(135deg,var(--misc-a),var(--misc-b))}
+.hn.active{color:#fff}.hn.active::before,.hn:hover::before{opacity:1}.hn:hover{color:#fff}
+
+/* SEARCH */
+.srch{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  border-radius:var(--radius-btn);padding:7px 7px 7px 16px;
+  backdrop-filter:blur(20px);transition:var(--transition);min-width:0;
+}
+.srch:focus-within{
+  border-color:rgba(255,107,53,.5);background:rgba(255,107,53,.06);
+  box-shadow:0 0 30px rgba(255,107,53,.1);
+}
+.srch input{
+  background:none;border:none;outline:none;
+  color:var(--text);font-family:var(--font-body);font-size:.8rem;
+  width:180px;direction:rtl;min-width:0;
+}
+.srch input::placeholder{color:var(--dim)}
+.srch-btn{
+  width:30px;height:30px;background:linear-gradient(135deg,#ff6b35,#ff006e);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;flex-shrink:0;
+}
+
+/* ================================
+   HERO
+   ================================ */
+.hero{
+  position:relative;z-index:1;
+  padding:130px 2rem 60px;
+  max-width:1500px;margin:0 auto;text-align:center;
+}
+
+.eyebrow{
+  display:inline-flex;align-items:center;gap:12px;margin-bottom:24px;
+  font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--dim);
+}
+.eline{width:36px;height:1px;background:linear-gradient(90deg,transparent,var(--dim))}
+.eline.r{background:linear-gradient(90deg,var(--dim),transparent)}
+
+.h1{
+  font-family:var(--font-display);
+  font-size:clamp(3.2rem,10vw,8rem);
+  line-height:.92;letter-spacing:2px;margin-bottom:18px;
+}
+.h1-w{display:block;color:#fff}
+.h1-c{
+  display:block;
+  background:linear-gradient(135deg,#ff6b35,#ff006e,#8338ec,#3a86ff,#06d6a0);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-size:400% 100%;animation:gflow 5s linear infinite;
+}
+@keyframes gflow{0%{background-position:0% 50%}100%{background-position:400% 50%}}
+
+.hero-p{font-size:.95rem;color:var(--dim);max-width:460px;margin:0 auto 44px;line-height:1.9}
+
+/* STATS */
+.stats{display:flex;justify-content:center;flex-wrap:wrap;gap:0}
+.sitem{padding:16px 36px;text-align:center;position:relative}
+.sitem+.sitem::before{
+  content:'';position:absolute;right:0;top:50%;transform:translateY(-50%);
+  height:32px;width:1px;background:rgba(255,255,255,.08);
+}
+.snum{font-family:var(--font-display);font-size:3.2rem;line-height:1;letter-spacing:2px}
+.slbl{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--dim);margin-top:3px}
+.sc1{background:linear-gradient(135deg,#ff6b35,#ff006e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sc2{background:linear-gradient(135deg,#8338ec,#c77dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sc3{background:linear-gradient(135deg,#3a86ff,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sc4{background:linear-gradient(135deg,#06d6a0,#ffd60a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ================================
+   SWITCHER
+   ================================ */
+.switcher{
+  position:relative;z-index:1;
+  display:grid;grid-template-columns:repeat(4,1fr);
+  gap:12px;max-width:960px;margin:0 auto 52px;
+  padding:0 2rem;
+}
+
+.sw{
+  border:none;border-radius:20px;padding:20px 12px;cursor:pointer;
+  font-family:var(--font-body);transition:var(--transition);
+  position:relative;overflow:hidden;
+}
+.sw::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .35s}
+.sw.sport-sw{background:rgba(255,107,53,.07);border:1px solid rgba(255,107,53,.2)}
+.sw.drama-sw{background:rgba(131,56,236,.07);border:1px solid rgba(131,56,236,.2)}
+.sw.action-sw{background:rgba(58,134,255,.07);border:1px solid rgba(58,134,255,.2)}
+.sw.misc-sw{background:rgba(6,214,160,.07);border:1px solid rgba(6,214,160,.2)}
+.sw.sport-sw::before{background:linear-gradient(135deg,#ff6b35,#ff006e)}
+.sw.drama-sw::before{background:linear-gradient(135deg,#8338ec,#c77dff)}
+.sw.action-sw::before{background:linear-gradient(135deg,#3a86ff,#00b4d8)}
+.sw.misc-sw::before{background:linear-gradient(135deg,#06d6a0,#ffd60a)}
+.sw.active::before{opacity:1}
+.sw.active{transform:translateY(-4px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.sw:hover:not(.active){transform:translateY(-2px)}
+.sw:active{transform:translateY(0) scale(.97)}
+.sw-inner{position:relative;z-index:1;text-align:center}
+.sw-ic{font-size:1.7rem;margin-bottom:6px;display:block}
+.sw-t{font-size:.9rem;font-weight:700;color:#fff;display:block;margin-bottom:4px}
+.sw-n{font-size:.68rem;color:rgba(255,255,255,.65);background:rgba(255,255,255,.12);border-radius:20px;padding:2px 10px;display:inline-block}
+
+/* ================================
+   MAIN / SECTIONS
+   ================================ */
+main{position:relative;z-index:1;max-width:1500px;margin:0 auto;padding:0 2rem 100px}
+
+.section{display:none}
+.section.active{display:block;animation:secin .45s cubic-bezier(.16,1,.3,1) both}
+@keyframes secin{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTION HEADER */
+.shead{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:36px;padding-bottom:20px;position:relative;
+}
+.shead::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px}
+#section-sport .shead::after{background:linear-gradient(90deg,#ff6b35,#ff006e,transparent)}
+#section-drama .shead::after{background:linear-gradient(90deg,#8338ec,#c77dff,transparent)}
+#section-action .shead::after{background:linear-gradient(90deg,#3a86ff,#00b4d8,transparent)}
+#section-misc .shead::after{background:linear-gradient(90deg,#06d6a0,#ffd60a,transparent)}
+
+.shead-bg{
+  font-family:var(--font-display);font-size:5.5rem;opacity:.04;
+  letter-spacing:6px;position:absolute;left:0;top:-10px;pointer-events:none;
+  white-space:nowrap;
+}
+.stitle{font-family:var(--font-display);font-size:3rem;letter-spacing:3px;line-height:1}
+.sdesc{font-size:.8rem;color:var(--dim);max-width:360px;line-height:1.7;margin-top:4px}
+.sport-title{background:linear-gradient(135deg,#ff6b35,#ff006e);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.drama-title{background:linear-gradient(135deg,#8338ec,#c77dff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.action-title{background:linear-gradient(135deg,#3a86ff,#00b4d8);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.misc-title{background:linear-gradient(135deg,#06d6a0,#ffd60a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+/* ================================
+   GRID
+   ================================ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+
+/* ================================
+   CARD
+   ================================ */
+.card{
+  border-radius:var(--radius-card);overflow:hidden;
+  text-decoration:none;display:block;position:relative;
+  opacity:0;animation:cardin .4s cubic-bezier(.16,1,.3,1) forwards;
+  -webkit-tap-highlight-color:transparent;
+}
+@keyframes cardin{
+  from{opacity:0;transform:translateY(16px) scale(.97)}
+  to{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* GLOW */
+.card-glow{
+  position:absolute;inset:-2px;border-radius:calc(var(--radius-card) + 2px);
+  opacity:0;transition:opacity .4s;pointer-events:none;z-index:0;
+}
+.sport-card .card-glow{background:linear-gradient(135deg,#ff6b35,#ff006e);filter:blur(20px)}
+.drama-card .card-glow{background:linear-gradient(135deg,#8338ec,#c77dff);filter:blur(20px)}
+.action-card .card-glow{background:linear-gradient(135deg,#3a86ff,#00b4d8);filter:blur(20px)}
+.misc-card .card-glow{background:linear-gradient(135deg,#06d6a0,#ffd60a);filter:blur(20px)}
+.card:hover .card-glow{opacity:.85}
+
+/* INNER */
+.card-inner{
+  background:var(--card-bg);
+  border:1px solid var(--border);
+  border-radius:var(--radius-card);
+  overflow:hidden;
+  transition:var(--transition);
+  position:relative;z-index:1;
+  backdrop-filter:blur(12px);
+}
+.card:hover .card-inner{
+  border-color:rgba(255,255,255,.18);
+  transform:translateY(-5px);
+  box-shadow:var(--shadow-lg);
+}
+.card:active .card-inner{transform:translateY(-2px) scale(.99)}
+
+/* ── LOGO AREA ── BIGGER IMAGE ── */
+.cla{
+  height:130px;  /* taller area */
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:rgba(255,255,255,.025);
+}
+.cla::before{
+  content:'';position:absolute;inset:0;opacity:.14;transition:opacity .35s;
+}
+.sport-card .cla::before{background:linear-gradient(135deg,#ff6b35,#ff006e)}
+.drama-card .cla::before{background:linear-gradient(135deg,#8338ec,#c77dff)}
+.action-card .cla::before{background:linear-gradient(135deg,#3a86ff,#00b4d8)}
+.misc-card .cla::before{background:linear-gradient(135deg,#06d6a0,#ffd60a)}
+.card:hover .cla::before{opacity:.26}
+
+/* SHIMMER */
+.cla::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(105deg,transparent 40%,rgba(255,255,255,.06) 50%,transparent 60%);
+  transform:translateX(-100%);transition:transform .6s ease;
+}
+.card:hover .cla::after{transform:translateX(100%)}
+
+/* LOGO IMAGE — bigger & cleaner */
+.cla-img{
+  width:90px;height:90px;  /* increased from 72px */
+  object-fit:contain;
+  background:#fff;
+  border-radius:16px;
+  padding:10px;
+  box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);
+  transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s;
+  position:relative;z-index:1;
+}
+.card:hover .cla-img{
+  transform:scale(1.12) translateY(-3px);
+  box-shadow:0 18px 40px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.15);
+}
+
+/* FALLBACK LOGO */
+.cla-fb{
+  width:90px;height:90px;
+  border-radius:16px;
+  background:rgba(255,255,255,.06);
+  display:none;align-items:center;justify-content:center;
+  position:relative;z-index:1;
+  transition:transform .35s cubic-bezier(.16,1,.3,1);
+  font-size:1.6rem;
+  border:1px solid rgba(255,255,255,.12);
+  overflow:hidden;
+}
+.cla-fb img{width:52px;height:52px;object-fit:contain;border-radius:8px}
+.card:hover .cla-fb{transform:scale(1.12) translateY(-3px)}
+
+/* CARD BODY */
+.cbody{padding:14px 14px 10px}
+.cname{
+  font-size:.9rem;font-weight:700;color:#fff;
+  margin-bottom:4px;line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.ccat{font-size:.67rem;color:var(--dim);display:flex;align-items:center;gap:5px;margin-bottom:7px}
+.cdot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.sport-card .cdot{background:#ff6b35}
+.drama-card .cdot{background:#c77dff}
+.action-card .cdot{background:#3a86ff}
+.misc-card .cdot{background:#06d6a0}
+.cdesc{font-size:.7rem;color:var(--dim);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+/* CARD FOOTER */
+.cfoot{
+  padding:10px 14px;border-top:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.cvisit{
+  font-size:.68rem;font-weight:700;letter-spacing:.3px;
+  display:flex;align-items:center;gap:5px;transition:gap .2s;
+}
+.sport-card .cvisit{color:#ff6b35}
+.drama-card .cvisit{color:#c77dff}
+.action-card .cvisit{color:#3a86ff}
+.misc-card .cvisit{color:#06d6a0}
+.card:hover .cvisit{gap:10px}
+.cvisit-arr{font-size:.8rem;display:inline-block;transition:transform .2s}
+.card:hover .cvisit-arr{transform:translateX(-4px)}
+.ctag{
+  font-size:.6rem;background:rgba(255,255,255,.06);
+  color:var(--dim);padding:3px 8px;border-radius:4px;
+}
+
+/* ================================
+   FOOTER
+   ================================ */
+footer{
+  position:relative;z-index:1;padding:44px 2rem;
+  border-top:1px solid rgba(255,255,255,.06);text-align:center;
+}
+.ft{max-width:1500px;margin:0 auto}
+.flogo{
+  font-family:var(--font-display);font-size:2rem;letter-spacing:5px;
+  background:linear-gradient(135deg,#ff6b35,#ff006e,#8338ec);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  margin-bottom:10px;
+}
+.fdesc{font-size:.78rem;color:var(--dim);line-height:1.8;max-width:500px;margin:0 auto}
+
+/* SCROLL TOP */
+#st{
+  position:fixed;bottom:24px;left:24px;
+  width:44px;height:44px;border-radius:14px;
+  background:linear-gradient(135deg,#ff6b35,#8338ec);
+  border:none;color:#fff;font-size:1rem;
+  cursor:pointer;z-index:100;
+  opacity:0;transform:translateY(20px);transition:var(--transition);
+  box-shadow:0 8px 30px rgba(255,107,53,.35);
+}
+#st.show{opacity:1;transform:translateY(0)}
+#st:hover{transform:translateY(-3px)!important}
+
+/* NO RESULTS */
+#no-results{display:none;text-align:center;padding:80px 20px;color:var(--dim)}
+#no-results p{font-size:1.1rem;margin-bottom:8px}
+#no-results span{font-size:.8rem}
+
+.hidden{display:none!important}
+
+/* ================================
+   MOBILE NAV BOTTOM
+   ================================ */
+.mobile-nav{
+  display:none;
+  position:fixed;bottom:0;left:0;right:0;z-index:900;
+  background:rgba(7,9,15,.95);
+  border-top:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(24px);
+  padding:8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.mobile-nav-inner{
+  display:flex;justify-content:space-around;align-items:stretch;max-width:480px;margin:0 auto;
+}
+.mn-btn{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  background:none;border:none;color:var(--dim);font-family:var(--font-body);
+  font-size:.62rem;font-weight:700;padding:8px 4px;
+  border-radius:12px;transition:var(--transition);cursor:pointer;
+  position:relative;overflow:hidden;
+}
+.mn-btn::before{
+  content:'';position:absolute;inset:0;border-radius:12px;opacity:0;transition:opacity .3s;
+}
+.mn-btn.sport-mn::before{background:linear-gradient(135deg,rgba(255,107,53,.25),rgba(255,0,110,.25))}
+.mn-btn.drama-mn::before{background:linear-gradient(135deg,rgba(131,56,236,.25),rgba(199,125,255,.25))}
+.mn-btn.action-mn::before{background:linear-gradient(135deg,rgba(58,134,255,.25),rgba(0,180,216,.25))}
+.mn-btn.misc-mn::before{background:linear-gradient(135deg,rgba(6,214,160,.25),rgba(255,214,10,.25))}
+.mn-btn.active{color:#fff}
+.mn-btn.active::before{opacity:1}
+.mn-ic{font-size:1.4rem;position:relative;z-index:1}
+.mn-lbl{position:relative;z-index:1}
+
+/* MOBILE SEARCH BAR */
+.mobile-search{
+  display:none;
+  position:fixed;top:70px;left:0;right:0;z-index:900;
+  padding:8px 16px;
+  background:rgba(7,9,15,.9);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.mobile-search-inner{
+  display:flex;align-items:center;gap:8px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
+  border-radius:14px;padding:10px 14px;transition:var(--transition);
+}
+.mobile-search-inner:focus-within{
+  border-color:rgba(255,107,53,.5);background:rgba(255,107,53,.07);
+}
+.mobile-search input{
+  flex:1;background:none;border:none;outline:none;
+  color:var(--text);font-family:var(--font-body);font-size:.85rem;direction:rtl;
+}
+.mobile-search input::placeholder{color:var(--dim)}
+.mobile-search-icon{font-size:1rem;color:var(--dim);flex-shrink:0}
+
+/* ================================
+   RESPONSIVE BREAKPOINTS
+   ================================ */
+
+/* ---- LARGE TABLET / SMALL DESKTOP ---- */
+@media(max-width:1100px){
+  .grid{grid-template-columns:repeat(auto-fill,minmax(200px,1fr))}
+}
+
+/* ---- TABLET (<=900px) ---- */
+@media(max-width:900px){
+  .hdr-nav{display:none}
+  .srch{display:none}
+  .switcher{display:none}
+  .mobile-search{display:block}
+  .mobile-nav{display:block}
+
+  body{padding-bottom:72px}
+
+  .hero{padding:80px 1.5rem 40px}
+  .h1{font-size:clamp(2.8rem,11vw,5rem)}
+  .hero-p{font-size:.9rem}
+  .stats{gap:0}
+  .sitem{padding:12px 20px}
+  .snum{font-size:2.6rem}
+
+  main{padding:0 1.5rem 100px}
+  .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+
+  .cla{height:120px}
+  .cla-img,.cla-fb{width:80px;height:80px}
+
+  .shead-bg{font-size:4rem}
+  .stitle{font-size:2.5rem}
+}
+
+/* ---- MOBILE (<=600px) ---- */
+@media(max-width:600px){
+  .hero{padding:76px 1rem 32px}
+  .h1{font-size:clamp(2.4rem,12vw,4rem);letter-spacing:1px}
+  .hero-p{font-size:.85rem;margin-bottom:28px}
+  .eyebrow{font-size:.62rem;gap:8px}
+  .eline{width:24px}
+
+  .stats{justify-content:center}
+  .sitem{padding:10px 14px}
+  .snum{font-size:2.2rem}
+  .slbl{font-size:.58rem}
+  .sitem+.sitem::before{display:none}
+
+  main{padding:0 1rem 100px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:10px}
+
+  .cla{height:110px}
+  .cla-img,.cla-fb{width:72px;height:72px}
+  .cla-img{padding:8px;border-radius:14px}
+
+  .cbody{padding:10px 10px 8px}
+  .cname{font-size:.82rem}
+  .cdesc{font-size:.66rem}
+  .cfoot{padding:8px 10px}
+  .cvisit{font-size:.62rem}
+  .ctag{font-size:.56rem}
+
+  .shead-bg{font-size:3rem}
+  .stitle{font-size:2rem}
+  .sdesc{font-size:.75rem}
+
+  header{padding:0 1rem}
+  .logo-name{font-size:1.5rem;letter-spacing:2px}
+  .logo-icon{width:36px;height:36px;font-size:1rem}
+
+  footer{padding:32px 1rem}
+  #st{bottom:80px;left:16px;width:40px;height:40px}
+}
+
+/* ---- SMALL MOBILE (<=380px) ---- */
+@media(max-width:380px){
+  .grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .cla{height:95px}
+  .cla-img,.cla-fb{width:62px;height:62px}
+  .h1{font-size:clamp(2.1rem,13vw,3.5rem)}
+}
+
+</style>
+</head>
+<body>
+
+<!-- CUSTOM CURSOR -->
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+
+<!-- BACKGROUND -->
+<div class="mesh">
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+</div>
+<div class="gridline"></div>
+
+<!-- ================================
+     HEADER (desktop)
+     ================================ -->
+<header>
+  <div class="hdr">
+    <!-- Logo -->
+    <a href="#" class="logo" onclick="return false">
+      <div class="logo-icon">📡</div>
+      <div>
+        <span class="logo-name">StreamHub</span>
+        <span class="logo-sub">World Channel Guide</span>
+      </div>
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hdr-nav">
+      <a href="#" class="hn hs active" onclick="showSec('sport',this);return false"><span>⚽ الرياضة</span></a>
+      <a href="#" class="hn hd"        onclick="showSec('drama',this);return false"><span>🎭 المسلسلات</span></a>
+      <a href="#" class="hn ha"        onclick="showSec('action',this);return false"><span>🎬 الأكشن</span></a>
+      <a href="#" class="hn hm"        onclick="showSec('misc',this);return false"><span>🌟 المنوعات</span></a>
+    </nav>
+
+    <!-- Desktop Search -->
+    <div class="srch">
+      <input type="text" id="si" placeholder="ابحث عن قناة..." oninput="doSearch(this.value)">
+      <div class="srch-btn">🔍</div>
+    </div>
+  </div>
+</header>
+
+<!-- ================================
+     MOBILE SEARCH BAR (sticky below header)
+     ================================ -->
+<div class="mobile-search">
+  <div class="mobile-search-inner">
+    <span class="mobile-search-icon">🔍</span>
+    <input type="text" id="msi" placeholder="ابحث عن أي قناة..." oninput="doSearch(this.value)">
+  </div>
+</div>
+
+<!-- ================================
+     HERO
+     ================================ -->
+<div class="hero">
+  <div class="eyebrow">
+    <span class="eline"></span>
+    دليل القنوات العالمي 2026
+    <span class="eline r"></span>
+  </div>
+  <h1 class="h1">
+    <span class="h1-w">اكتشف عالماً</span>
+    <span class="h1-c">بلا حدود</span>
+  </h1>
+  <p class="hero-p">أكثر من 550 قناة ومحطة رسمية في مكان واحد — اضغط واذهب مباشرة</p>
+  <div class="stats">
+    <div class="sitem"><div class="snum sc1">150</div><div class="slbl">قناة رياضية</div></div>
+    <div class="sitem"><div class="snum sc2">150</div><div class="slbl">قناة مسلسلات</div></div>
+    <div class="sitem"><div class="snum sc3">100</div><div class="slbl">قناة أكشن</div></div>
+    <div class="sitem"><div class="snum sc4">150</div><div class="slbl">قناة منوعات</div></div>
+  </div>
+</div>
+
+<!-- ================================
+     CATEGORY SWITCHER (desktop)
+     ================================ -->
+<div class="switcher">
+  <button class="sw sport-sw active"  onclick="showSec('sport',this,'sw')">
+    <div class="sw-inner"><span class="sw-ic">⚽</span><span class="sw-t">الرياضة</span><span class="sw-n">150 قناة</span></div>
+  </button>
+  <button class="sw drama-sw"         onclick="showSec('drama',this,'sw')">
+    <div class="sw-inner"><span class="sw-ic">🎭</span><span class="sw-t">المسلسلات</span><span class="sw-n">150 قناة</span></div>
+  </button>
+  <button class="sw action-sw"        onclick="showSec('action',this,'sw')">
+    <div class="sw-inner"><span class="sw-ic">🎬</span><span class="sw-t">الأكشن</span><span class="sw-n">100 قناة</span></div>
+  </button>
+  <button class="sw misc-sw"          onclick="showSec('misc',this,'sw')">
+    <div class="sw-inner"><span class="sw-ic">🌟</span><span class="sw-t">المنوعات</span><span class="sw-n">150 قناة</span></div>
+  </button>
+</div>
+
+<!-- ================================
+     MAIN CONTENT
+     ================================ -->
+<main>
+  <div id="no-results">
+    <p>🔍 لا توجد نتائج تطابق بحثك</p>
+    <span>جرّب كلمة مختلفة أو تصفح التصنيفات</span>
+  </div>
+
+  <!-- SPORT -->
+  <div id="section-sport" class="section active">
+    <div class="shead">
+      <div class="shead-bg">SPORT</div>
+      <div>
+        <div class="stitle sport-title">القنوات الرياضية</div>
+        <div class="sdesc">150 قناة رياضية متخصصة من حول العالم</div>
+      </div>
+    </div>
+    <div class="grid" id="grid-sport"></div>
+  </div>
+
+  <!-- DRAMA -->
+  <div id="section-drama" class="section">
+    <div class="shead">
+      <div class="shead-bg">DRAMA</div>
+      <div>
+        <div class="stitle drama-title">قنوات المسلسلات</div>
+        <div class="sdesc">150 قناة للدراما والمسلسلات العربية والعالمية</div>
+      </div>
+    </div>
+    <div class="grid" id="grid-drama"></div>
+  </div>
+
+  <!-- ACTION -->
+  <div id="section-action" class="section">
+    <div class="shead">
+      <div class="shead-bg">ACTION</div>
+      <div>
+        <div class="stitle action-title">قنوات الأكشن</div>
+        <div class="sdesc">100 قناة للأكشن والأفلام والمغامرات</div>
+      </div>
+    </div>
+    <div class="grid" id="grid-action"></div>
+  </div>
+
+  <!-- MISC -->
+  <div id="section-misc" class="section">
+    <div class="shead">
+      <div class="shead-bg">MORE</div>
+      <div>
+        <div class="stitle misc-title">قنوات المنوعات</div>
+        <div class="sdesc">150 قناة متنوعة — أخبار وأطفال وموسيقى وثقافة</div>
+      </div>
+    </div>
+    <div class="grid" id="grid-misc"></div>
+  </div>
+</main>
+
+<!-- ================================
+     FOOTER
+     ================================ -->
+<footer>
+  <div class="ft">
+    <div class="flogo">StreamHub</div>
+    <div class="fdesc">دليل روابط القنوات الرسمية العالمية — اضغط على أي قناة للانتقال لموقعها الرسمي مباشرة</div>
+  </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button id="st" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<!-- ================================
+     MOBILE BOTTOM NAV
+     ================================ -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mn-btn sport-mn active" onclick="showSec('sport',this,'sw')">
+      <span class="mn-ic">⚽</span><span class="mn-lbl">رياضة</span>
+    </button>
+    <button class="mn-btn drama-mn" onclick="showSec('drama',this,'sw')">
+      <span class="mn-ic">🎭</span><span class="mn-lbl">مسلسلات</span>
+    </button>
+    <button class="mn-btn action-mn" onclick="showSec('action',this,'sw')">
+      <span class="mn-ic">🎬</span><span class="mn-lbl">أكشن</span>
+    </button>
+    <button class="mn-btn misc-mn" onclick="showSec('misc',this,'sw')">
+      <span class="mn-ic">🌟</span><span class="mn-lbl">منوعات</span>
+    </button>
+  </div>
+</nav>
+
+<script>
+/* ================================
+   STREAMHUB — JAVASCRIPT
+   ================================ */
+
+// ---- DATA ----
+const D = {
+sport:[
+{n:"beIN Sports 1",c:"عربي",d:"الدوريات الأوروبية الكبرى بجودة HD",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports 2",c:"عربي",d:"دوري أبطال أوروبا والكأس الكبرى",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports 3",c:"عربي",d:"الدوري الإسباني LaLiga",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports 4",c:"عربي",d:"الدوري الفرنسي Ligue 1",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports 5",c:"عربي",d:"بطولات آسيوية وألعاب متعددة",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports Max 1",c:"عربي",d:"بث 4K لأهم مباريات beIN",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports Max 2",c:"عربي",d:"عروض HD حصرية لأبطال أوروبا",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"beIN Sports Max 3",c:"عربي",d:"أبرز أحداث beIN بجودة فائقة",u:"https://www.beinsports.com/ar",l:"beinsports.com"},
+{n:"بيان سبورت",c:"عراقي",d:"الدوري العراقي والبطولات العربية",u:"https://www.facebook.com/BayanSportTV",l:"facebook.com"},
+{n:"القاهرة الرياضية",c:"مصري",d:"تغطية الأحداث الرياضية المصرية رسمياً",u:"https://www.ergochannel.tv",l:"ergochannel.tv"},
+{n:"أبوظبي الرياضية",c:"خليجي",d:"الدوري الإماراتي وكأس آسيا",u:"https://sport.abudhabi.ae",l:"abudhabi.ae"},
+{n:"أبوظبي الرياضية 2",c:"خليجي",d:"كرة السلة والتنس وألعاب متعددة",u:"https://sport.abudhabi.ae",l:"abudhabi.ae"},
+{n:"دبي الرياضية",c:"خليجي",d:"الأحداث الرياضية الإماراتية والعالمية",u:"https://www.dubaimedia.ae",l:"dubaimedia.ae"},
+{n:"SSC 1",c:"سعودي",d:"الدوري السعودي للمحترفين",u:"https://www.ssc.com.sa",l:"ssc.com.sa"},
+{n:"SSC 2",c:"سعودي",d:"البطولات الكروية الدولية",u:"https://www.ssc.com.sa",l:"ssc.com.sa"},
+{n:"SSC 3",c:"سعودي",d:"الكريكيت والتنس والجمباز",u:"https://www.ssc.com.sa",l:"ssc.com.sa"},
+{n:"SSC Extra",c:"سعودي",d:"الأحداث الرياضية الإضافية",u:"https://www.ssc.com.sa",l:"ssc.com.sa"},
+{n:"MBC Sports",c:"عربي",d:"الدوري الإنجليزي وبطولات النخبة",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"MBC Sports 2",c:"عربي",d:"تحليل رياضي وتغطيات عالمية",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"الجزيرة الرياضية",c:"عربي",d:"البطولات الدولية من الدوحة",u:"https://www.aljazeera.net",l:"aljazeera.net"},
+{n:"Sport 360",c:"خليجي",d:"أخبار الرياضة العالمية من دبي",u:"https://sport360.com",l:"sport360.com"},
+{n:"Rotana Sport",c:"عربي",d:"الفورمولا وبطولات متنوعة",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"Sky Sports Football",c:"بريطاني",d:"الدوري الإنجليزي الممتاز حصرياً",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"Sky Sports Main Event",c:"بريطاني",d:"أبرز الأحداث الرياضية على Sky",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"Sky Sports F1",c:"بريطاني",d:"الفورمولا 1 بتغطية متكاملة",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"Sky Sports Cricket",c:"بريطاني",d:"الكريكيت الدولي والمحلي",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"Sky Sports Golf",c:"بريطاني",d:"الغولف العالمي والبطولات الكبرى",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"Sky Sports Premier League",c:"بريطاني",d:"قناة مخصصة للدوري الإنجليزي",u:"https://www.skysports.com",l:"skysports.com"},
+{n:"ESPN",c:"أمريكي",d:"NBA وNFL وكبرى بطولات أمريكا",u:"https://www.espn.com",l:"espn.com"},
+{n:"ESPN 2",c:"أمريكي",d:"رياضات جامعية وتنس",u:"https://www.espn.com",l:"espn.com"},
+{n:"ESPN 3",c:"أمريكي",d:"البيسبول والهوكي وبطولات",u:"https://www.espn.com",l:"espn.com"},
+{n:"FOX Sports 1",c:"أمريكي",d:"الدوريات الأمريكية والإسبانية",u:"https://www.foxsports.com",l:"foxsports.com"},
+{n:"FOX Sports 2",c:"أمريكي",d:"رياضات متعددة والمصارعة",u:"https://www.foxsports.com",l:"foxsports.com"},
+{n:"NBC Sports",c:"أمريكي",d:"الهوكي والسباقات والأولمبياد",u:"https://www.nbcsports.com",l:"nbcsports.com"},
+{n:"CBS Sports",c:"أمريكي",d:"NFL والقدم الجامعية",u:"https://www.cbssports.com",l:"cbssports.com"},
+{n:"NFL Network",c:"أمريكي",d:"كرة القدم الأمريكية طوال العام",u:"https://www.nfl.com/network",l:"nfl.com"},
+{n:"NBA TV",c:"أمريكي",d:"دوري السلة الأمريكي رسمياً",u:"https://www.nba.com/watch/nba-tv",l:"nba.com"},
+{n:"MLB Network",c:"أمريكي",d:"البيسبول الأمريكي طوال الموسم",u:"https://www.mlb.com/network",l:"mlb.com"},
+{n:"Golf Channel",c:"أمريكي",d:"القناة الأولى عالمياً للغولف",u:"https://www.golfchannel.com",l:"golfchannel.com"},
+{n:"Tennis Channel",c:"أمريكي",d:"تنس Grand Slam والبطولات الكبرى",u:"https://www.tennischannel.com",l:"tennischannel.com"},
+{n:"Eurosport 1",c:"أوروبي",d:"السيكلينج والتنس والتزلج الأوروبي",u:"https://www.eurosport.com",l:"eurosport.com"},
+{n:"Eurosport 2",c:"أوروبي",d:"الرياضات الشتوية والمائية",u:"https://www.eurosport.com",l:"eurosport.com"},
+{n:"DAZN",c:"دولي",d:"الملاكمة وكرة القدم العالمية",u:"https://www.dazn.com",l:"dazn.com"},
+{n:"Canal+ Sport",c:"فرنسي",d:"Ligue 1 ودوري أبطال أوروبا",u:"https://www.canalplus.com",l:"canalplus.com"},
+{n:"RMC Sport 1",c:"فرنسي",d:"UFC والملاكمة وبطولات فرنسا",u:"https://rmcsport.bfmtv.com",l:"bfmtv.com"},
+{n:"Sky Sport Serie A",c:"إيطالي",d:"الدوري الإيطالي حصرياً",u:"https://sport.sky.it",l:"sky.it"},
+{n:"DAZN Serie A",c:"إيطالي",d:"مباريات السيريا A حصرياً",u:"https://www.dazn.com",l:"dazn.com"},
+{n:"Movistar LaLiga",c:"إسباني",d:"الدوري الإسباني حصرياً",u:"https://www.movistarplus.es",l:"movistarplus.es"},
+{n:"Sky Sport Germany",c:"ألماني",d:"البوندسليغا ودوريات أوروبا",u:"https://www.sky.de",l:"sky.de"},
+{n:"DAZN Bundesliga",c:"ألماني",d:"الدوري الألماني حصرياً",u:"https://www.dazn.com",l:"dazn.com"},
+{n:"SuperSport 1",c:"أفريقي",d:"كرة القدم والكريكيت الأفريقي",u:"https://supersport.com",l:"supersport.com"},
+{n:"SuperSport 2",c:"أفريقي",d:"الغولف والتنس الأفريقي",u:"https://supersport.com",l:"supersport.com"},
+{n:"SuperSport 3",c:"أفريقي",d:"الملاكمة والرياضات القتالية",u:"https://supersport.com",l:"supersport.com"},
+{n:"Star Sports 1",c:"آسيوي",d:"الكريكيت وبطولات آسيا الكبرى",u:"https://www.hotstar.com",l:"hotstar.com"},
+{n:"Star Sports 2",c:"آسيوي",d:"البدمنتون والرياضات الآسيوية",u:"https://www.hotstar.com",l:"hotstar.com"},
+{n:"Sony Sports 1",c:"آسيوي",d:"الكريكيت الهندي الدولي",u:"https://www.sonyliv.com",l:"sonyliv.com"},
+{n:"Sony Sports 2",c:"آسيوي",d:"التنس والملاكمة في آسيا",u:"https://www.sonyliv.com",l:"sonyliv.com"},
+{n:"J Sports 1",c:"ياباني",d:"J.League والملاكمة اليابانية",u:"https://www.jsports.co.jp",l:"jsports.co.jp"},
+{n:"J Sports 2",c:"ياباني",d:"التنس والرغبي والسيكلينج",u:"https://www.jsports.co.jp",l:"jsports.co.jp"},
+{n:"SPOTV",c:"كوري",d:"K-League والدوريات الأوروبية",u:"https://www.spotvnow.co.kr",l:"spotvnow.co.kr"},
+{n:"TRT Spor",c:"تركي",d:"الدوري التركي والبطولات الرسمية",u:"https://www.trtspor.com.tr",l:"trtspor.com.tr"},
+{n:"F1 TV Pro",c:"دولي",d:"الفورمولا 1 حصرياً بالكامل",u:"https://f1tv.formula1.com",l:"formula1.com"},
+{n:"MotoGP",c:"دولي",d:"سباقات MotoGP الرسمية",u:"https://www.motogp.com",l:"motogp.com"},
+{n:"UFC",c:"دولي",d:"الفنون القتالية UFC رسمياً",u:"https://www.ufc.com",l:"ufc.com"},
+{n:"Olympic Channel",c:"دولي",d:"القناة الأولمبية الرسمية الدولية",u:"https://www.olympicchannel.com",l:"olympicchannel.com"},
+{n:"FIFA+",c:"دولي",d:"منصة الفيفا للمحتوى الكروي الحصري",u:"https://www.fifa.com/fifaplus",l:"fifa.com"},
+{n:"UEFA.tv",c:"أوروبي",d:"يويفا الأرشيف والمحتوى الحصري",u:"https://www.uefa.tv",l:"uefa.com"},
+{n:"FIBA Basketball",c:"دولي",d:"الاتحاد الدولي لكرة السلة",u:"https://www.fiba.basketball",l:"fiba.basketball"},
+{n:"ATP Tour",c:"دولي",d:"بطولة ATP للتنس الرجالي",u:"https://www.atptour.com",l:"atptour.com"},
+{n:"WTA Tennis",c:"دولي",d:"دوري WTA للتنس النسائي العالمي",u:"https://www.wtatennis.com",l:"wtatennis.com"},
+{n:"Red Bull TV",c:"دولي",d:"رياضات جريئة ومغامرات حصرية",u:"https://www.redbull.com/tv",l:"redbull.com"},
+{n:"Kayo Sports",c:"أسترالي",d:"منصة الرياضة الأسترالية الشاملة",u:"https://kayosports.com.au",l:"kayosports.com.au"},
+{n:"Fox Sports AU",c:"أسترالي",d:"AFL وكرة القدم الأسترالية",u:"https://www.foxsports.com.au",l:"foxsports.com.au"},
+{n:"TSN Canada",c:"كندي",d:"NHL وNBA والرياضة الكندية",u:"https://www.tsn.ca",l:"tsn.ca"},
+{n:"Sportsnet",c:"كندي",d:"الهوكي والبيسبول الكندي",u:"https://www.sportsnet.ca",l:"sportsnet.ca"},
+{n:"BBC Sport",c:"بريطاني",d:"التغطية الرياضية البريطانية الشاملة",u:"https://www.bbc.com/sport",l:"bbc.com"},
+{n:"RAI Sport",c:"إيطالي",d:"الرياضة الإيطالية العامة الرسمية",u:"https://www.raisport.rai.it",l:"rai.it"},
+{n:"RTVE Deporte",c:"إسباني",d:"الرياضة الإسبانية العامة",u:"https://www.rtve.es/deportes",l:"rtve.es"},
+{n:"ZDF Sport",c:"ألماني",d:"الجوائز الكبرى والبوندسليغا",u:"https://www.zdf.de/sport",l:"zdf.de"},
+{n:"Sport TV Portugal",c:"برتغالي",d:"الدوري البرتغالي الممتاز",u:"https://www.sporttv.pt",l:"sporttv.pt"},
+{n:"Eleven Sports",c:"أوروبي",d:"الدوريات البرتغالية والبلجيكية",u:"https://www.elevensports.com",l:"elevensports.com"},
+{n:"SporTV Brazil",c:"برازيلي",d:"الدوريات البرازيلية والعالمية",u:"https://sportv.globo.com",l:"globo.com"},
+{n:"ESPN Brasil",c:"برازيلي",d:"Brasileirão والكونميبول",u:"https://www.espnbrasil.com.br",l:"espnbrasil.com.br"},
+{n:"Azteca Deportes",c:"مكسيكي",d:"Liga MX وبطولات المكسيك",u:"https://www.aztecadeportes.com",l:"aztecadeportes.com"},
+{n:"CONMEBOL+",c:"دولي",d:"كوبا ليبيرتادوريس رسمياً",u:"https://www.conmebolplus.com",l:"conmebolplus.com"},
+{n:"Sky Sport NZ",c:"نيوزيلندي",d:"الرغبي والكريكيت في نيوزيلندا",u:"https://www.skysport.co.nz",l:"skysport.co.nz"},
+{n:"Astro SuperSport",c:"ماليزي",d:"الدوري الإنجليزي في ماليزيا",u:"https://www.astro.com.my",l:"astro.com.my"},
+{n:"Mola TV",c:"إندونيسي",d:"الدوري الإنجليزي في إندونيسيا",u:"https://www.mola.tv",l:"mola.tv"},
+{n:"CCTV Sports",c:"صيني",d:"الدوريات والبطولات الصينية",u:"https://sports.cctv.com",l:"cctv.com"},
+{n:"LiveScore",c:"دولي",d:"نتائج فورية لكل الرياضات",u:"https://www.livescore.com",l:"livescore.com"},
+{n:"SofaScore",c:"دولي",d:"إحصاءات وتقييمات لحظية",u:"https://www.sofascore.com",l:"sofascore.com"},
+{n:"Flashscore",c:"دولي",d:"نتائج أكثر من 30 رياضة",u:"https://www.flashscore.com",l:"flashscore.com"},
+{n:"TransferMarkt",c:"دولي",d:"قيم اللاعبين وصفقات الانتقال",u:"https://www.transfermarkt.com",l:"transfermarkt.com"},
+{n:"WhoScored",c:"دولي",d:"الإحصاءات والتقييمات الرياضية",u:"https://www.whoscored.com",l:"whoscored.com"},
+{n:"FBref",c:"دولي",d:"قاعدة بيانات الكرة الضخمة",u:"https://fbref.com",l:"fbref.com"},
+{n:"Fight Network",c:"دولي",d:"MMA والملاكمة على مدار الساعة",u:"https://www.fightnetwork.com",l:"fightnetwork.com"},
+{n:"World Surf League",c:"دولي",d:"بطولة ركوب الأمواج العالمية",u:"https://www.worldsurfleague.com",l:"worldsurfleague.com"},
+{n:"Willow Cricket",c:"دولي",d:"الكريكيت الدولي بالكامل",u:"https://www.willowcricket.com",l:"willowcricket.com"},
+{n:"Horse Racing TV",c:"بريطاني",d:"سباقات الخيل البريطانية",u:"https://www.horseracingtv.com",l:"horseracingtv.com"},
+{n:"NASCAR TV",c:"أمريكي",d:"سباقات السيارات الأمريكية",u:"https://www.nascar.com",l:"nascar.com"},
+{n:"France TV Sport",c:"فرنسي",d:"الرياضة الفرنسية العامة",u:"https://www.france.tv/sport",l:"france.tv"},
+{n:"World Rugby",c:"دولي",d:"الاتحاد الدولي للرغبي",u:"https://www.world.rugby",l:"world.rugby"},
+{n:"Polsat Sport",c:"بولندي",d:"الرياضات البولندية والأوروبية",u:"https://polsatsport.pl",l:"polsatsport.pl"},
+{n:"Setanta Sports",c:"أيرلندي",d:"الدوريات الأوروبية في إيرلندا",u:"https://www.setantasports.com",l:"setantasports.com"},
+{n:"Bleacher Report",c:"أمريكي",d:"أخبار الرياضة الأمريكية والعالمية",u:"https://bleacherreport.com",l:"bleacherreport.com"},
+{n:"VTV Sport",c:"فيتنامي",d:"القناة الرياضية الفيتنامية الرسمية",u:"https://vtv.vn",l:"vtv.vn"},
+{n:"True Sport",c:"تايلاندي",d:"الدوري الإنجليزي في تايلاند",u:"https://truesport.trueid.net",l:"trueid.net"},
+],
+drama:[
+{n:"MBC 1",c:"عربي",d:"أبرز مسلسلات رمضان والبرامج الكبرى",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"MBC Drama",c:"عربي",d:"قناة الدراما العربية الحصرية",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"MBC Drama Plus",c:"عربي",d:"كلاسيكيات الدراما العربية",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"MBC 4",c:"عربي",d:"المسلسلات الأجنبية المدبلجة",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"Shahid VIP",c:"عربي",d:"المحتوى العربي الحصري الأصيل",u:"https://shahid.mbc.net",l:"shahid.mbc.net"},
+{n:"روتانا دراما",c:"عربي",d:"مسلسلات روتانا الحصرية المتنوعة",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"روتانا خليجية",c:"خليجي",d:"الإنتاجات الدرامية الخليجية",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"روتانا مصرية",c:"مصري",d:"الكلاسيكيات المصرية الذهبية",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"OSN Drama",c:"عربي",d:"مسلسلات أجنبية مدبلجة حصرياً",u:"https://www.osn.com",l:"osn.com"},
+{n:"OSN Series",c:"عربي",d:"المسلسلات الأمريكية الكبرى",u:"https://www.osn.com",l:"osn.com"},
+{n:"OSN Ya Hala",c:"عربي",d:"الأفلام والمسلسلات العربية",u:"https://www.osn.com",l:"osn.com"},
+{n:"CBC Egypt",c:"مصري",d:"أبرز المسلسلات المصرية الحديثة",u:"https://cbcegy.com",l:"cbcegy.com"},
+{n:"CBC Extra",c:"مصري",d:"برامج ترفيهية مصرية متنوعة",u:"https://cbcegy.com",l:"cbcegy.com"},
+{n:"DMC Drama",c:"مصري",d:"الإنتاجات الدرامية على DMC",u:"https://www.dmc.eg",l:"dmc.eg"},
+{n:"ON Drama",c:"مصري",d:"الدراما المصرية الحديثة",u:"https://www.on.eg",l:"on.eg"},
+{n:"النهار دراما",c:"مصري",d:"مسلسلات يومية متنوعة",u:"https://www.alnaharegypt.com",l:"alnaharegypt.com"},
+{n:"الحياة الحمراء",c:"مصري",d:"المسلسلات المصرية الكلاسيكية",u:"https://www.hayah.tv",l:"hayah.tv"},
+{n:"Weyyak",c:"عربي",d:"مسلسلات وأفلام عربية للجميع",u:"https://www.weyyak.com",l:"weyyak.com"},
+{n:"Watchit",c:"مصري",d:"منصة المحتوى المصري الرقمي",u:"https://watchit.eg",l:"watchit.eg"},
+{n:"Anghami Plus",c:"عربي",d:"محتوى عربي أصيل من أنغامي",u:"https://www.anghami.com",l:"anghami.com"},
+{n:"Netflix",c:"دولي",d:"المسلسلات الأصيلة الأفضل عالمياً",u:"https://www.netflix.com",l:"netflix.com"},
+{n:"Amazon Prime Video",c:"دولي",d:"مسلسلات أصيلة حائزة جوائز",u:"https://www.primevideo.com",l:"primevideo.com"},
+{n:"Disney+",c:"دولي",d:"ديزني وMarvel وStar Wars",u:"https://www.disneyplus.com",l:"disneyplus.com"},
+{n:"Apple TV+",c:"دولي",d:"أرقى المسلسلات الأصيلة الفريدة",u:"https://tv.apple.com",l:"apple.com"},
+{n:"HBO Max",c:"أمريكي",d:"Game of Thrones وSuccession",u:"https://www.max.com",l:"max.com"},
+{n:"Hulu",c:"أمريكي",d:"مسلسلات أمريكية حديثة",u:"https://www.hulu.com",l:"hulu.com"},
+{n:"Peacock TV",c:"أمريكي",d:"محتوى NBC الحصري",u:"https://www.peacocktv.com",l:"peacocktv.com"},
+{n:"Paramount+",c:"أمريكي",d:"مسلسلات وأفلام Paramount",u:"https://www.paramountplus.com",l:"paramountplus.com"},
+{n:"Showtime",c:"أمريكي",d:"مسلسلات حصرية وجريئة",u:"https://www.sho.com",l:"sho.com"},
+{n:"AMC Networks",c:"أمريكي",d:"Walking Dead وBetter Call Saul",u:"https://www.amcnetworks.com",l:"amcnetworks.com"},
+{n:"FX Networks",c:"أمريكي",d:"مسلسلات FX الحائزة جوائز",u:"https://www.fxnetworks.com",l:"fxnetworks.com"},
+{n:"Starz",c:"أمريكي",d:"دراما وأكشن حصري",u:"https://www.starz.com",l:"starz.com"},
+{n:"IFC",c:"أمريكي",d:"كوميديا ساخرة ومسلسلات مستقلة",u:"https://www.ifc.com",l:"ifc.com"},
+{n:"Hallmark Channel",c:"أمريكي",d:"مسلسلات عاطفية وعائلية",u:"https://www.hallmarkchannel.com",l:"hallmarkchannel.com"},
+{n:"Lifetime",c:"أمريكي",d:"المسلسلات النسائية الشهيرة",u:"https://www.mylifetime.com",l:"mylifetime.com"},
+{n:"Bravo",c:"أمريكي",d:"برامج واقع ودراما شعبية",u:"https://www.bravotv.com",l:"bravotv.com"},
+{n:"BBC One",c:"بريطاني",d:"أرقى الدراما البريطانية",u:"https://www.bbc.co.uk",l:"bbc.co.uk"},
+{n:"BBC Two",c:"بريطاني",d:"مسلسلات ووثائقيات BBC",u:"https://www.bbc.co.uk",l:"bbc.co.uk"},
+{n:"ITV1",c:"بريطاني",d:"الدراما البريطانية الشعبية",u:"https://www.itv.com",l:"itv.com"},
+{n:"Channel 4",c:"بريطاني",d:"مسلسلات بريطانية مبتكرة",u:"https://www.channel4.com",l:"channel4.com"},
+{n:"Sky Atlantic",c:"بريطاني",d:"مسلسلات HBO حصرياً في أوروبا",u:"https://www.sky.com",l:"sky.com"},
+{n:"E4",c:"بريطاني",d:"مسلسلات أمريكية وشبابية",u:"https://www.channel4.com",l:"channel4.com"},
+{n:"Drama UK",c:"بريطاني",d:"المسلسلات البريطانية الراقية",u:"https://www.uktv.co.uk",l:"uktv.co.uk"},
+{n:"Alibi UK",c:"بريطاني",d:"الغموض والمسلسلات البوليسية",u:"https://www.uktv.co.uk",l:"uktv.co.uk"},
+{n:"Arte",c:"أوروبي",d:"الدراما الفرنسية الألمانية الراقية",u:"https://www.arte.tv",l:"arte.tv"},
+{n:"Canal+ France",c:"فرنسي",d:"المسلسلات الفرنسية الحصرية",u:"https://www.canalplus.com",l:"canalplus.com"},
+{n:"TF1",c:"فرنسي",d:"القناة الأولى للدراما الفرنسية",u:"https://www.tf1.fr",l:"tf1.fr"},
+{n:"RTL Germany",c:"ألماني",d:"مسلسلات وترفيه ألماني",u:"https://www.rtl.de",l:"rtl.de"},
+{n:"ProSieben",c:"ألماني",d:"المسلسلات الأمريكية في ألمانيا",u:"https://www.prosieben.de",l:"prosieben.de"},
+{n:"Rai 1",c:"إيطالي",d:"القناة الإيطالية الأولى للدراما",u:"https://www.rai.it",l:"rai.it"},
+{n:"Antena 3",c:"إسباني",d:"مسلسلات Antena 3 الشعبية",u:"https://www.antena3.com",l:"antena3.com"},
+{n:"TVE 1",c:"إسباني",d:"القناة الإسبانية الرسمية",u:"https://www.rtve.es",l:"rtve.es"},
+{n:"KBS World",c:"كوري",d:"الدراما الكورية للعالم",u:"https://world.kbs.co.kr",l:"kbs.co.kr"},
+{n:"MBC Korea",c:"كوري",d:"أحدث المسلسلات الكورية",u:"https://www.imbc.com",l:"imbc.com"},
+{n:"SBS Korea",c:"كوري",d:"مسلسلات رومانسية كورية",u:"https://www.sbs.co.kr",l:"sbs.co.kr"},
+{n:"tvN Korea",c:"كوري",d:"مسلسلات tvN الحائزة جوائز",u:"https://www.cjenm.com",l:"cjenm.com"},
+{n:"JTBC",c:"كوري",d:"دراما اجتماعية كورية مميزة",u:"https://www.jtbc.co.kr",l:"jtbc.co.kr"},
+{n:"OCN",c:"كوري",d:"مسلسلات الغموض والجريمة",u:"https://www.ocn.co.kr",l:"ocn.co.kr"},
+{n:"Viki",c:"آسيوي",d:"مسلسلات آسيوية مترجمة للعالم",u:"https://www.viki.com",l:"viki.com"},
+{n:"Crunchyroll",c:"ياباني",d:"منصة الأنمي الأكبر عالمياً",u:"https://www.crunchyroll.com",l:"crunchyroll.com"},
+{n:"Fuji TV",c:"ياباني",d:"أشهر المسلسلات اليابانية",u:"https://www.fujitv.co.jp",l:"fujitv.co.jp"},
+{n:"NHK World Drama",c:"ياباني",d:"الدراما اليابانية الدولية",u:"https://www3.nhk.or.jp/nhkworld",l:"nhk.or.jp"},
+{n:"Zee TV",c:"هندي",d:"أبرز قنوات الدراما الهندية",u:"https://www.zeetv.com",l:"zeetv.com"},
+{n:"Star Plus",c:"هندي",d:"مسلسلات Star Plus المحبوبة",u:"https://www.hotstar.com",l:"hotstar.com"},
+{n:"Colors TV",c:"هندي",d:"الدراما الهندية الشعبية",u:"https://www.colorstv.com",l:"colorstv.com"},
+{n:"Sony LIV",c:"هندي",d:"منصة Sony الهندية للبث",u:"https://www.sonyliv.com",l:"sonyliv.com"},
+{n:"Hotstar Premium",c:"هندي",d:"Disney+ Hotstar الهندية",u:"https://www.hotstar.com",l:"hotstar.com"},
+{n:"iQIYI",c:"صيني",d:"أضخم منصة مسلسلات صينية",u:"https://www.iq.com",l:"iq.com"},
+{n:"Tencent Video",c:"صيني",d:"منصة Tencent للمحتوى الضخم",u:"https://v.qq.com",l:"qq.com"},
+{n:"Youku",c:"صيني",d:"يوكو للمسلسلات التاريخية الصينية",u:"https://www.youku.com",l:"youku.com"},
+{n:"BluTV",c:"تركي",d:"مسلسلات BluTV الحصرية",u:"https://www.blutv.com",l:"blutv.com"},
+{n:"Show TV",c:"تركي",d:"Show TV للمسلسلات التركية الشعبية",u:"https://www.showtv.com.tr",l:"showtv.com.tr"},
+{n:"Kanal D",c:"تركي",d:"Kanal D للدراما التركية الكبرى",u:"https://www.kanald.com.tr",l:"kanald.com.tr"},
+{n:"FOX Turkey",c:"تركي",d:"FOX التركية للمسلسلات المتميزة",u:"https://www.fox.com.tr",l:"fox.com.tr"},
+{n:"Star TV Turkey",c:"تركي",d:"Star التركية للدراما والترفيه",u:"https://www.startv.com.tr",l:"startv.com.tr"},
+{n:"ATV Turkey",c:"تركي",d:"ATV التركية للدراما الاجتماعية",u:"https://www.atv.com.tr",l:"atv.com.tr"},
+{n:"TRT 1",c:"تركي",d:"القناة التركية الرسمية للدراما",u:"https://www.trt1.com.tr",l:"trt1.com.tr"},
+{n:"Puhu TV",c:"تركي",d:"مسلسلات Puhu التركية الأصيلة",u:"https://puhutv.com",l:"puhutv.com"},
+{n:"SVT1 Sweden",c:"إسكندنافي",d:"الدراما السويدية الرسمية",u:"https://www.svtplay.se",l:"svtplay.se"},
+{n:"NRK1 Norway",c:"إسكندنافي",d:"المسلسلات النرويجية الأيقونية",u:"https://www.nrk.no",l:"nrk.no"},
+{n:"DR1 Denmark",c:"إسكندنافي",d:"الدراما الشمالية الدنماركية",u:"https://www.dr.dk",l:"dr.dk"},
+{n:"Globo Brazil",c:"برازيلي",d:"Telenovelas برازيلية شهيرة عالمياً",u:"https://globoplay.globo.com",l:"globo.com"},
+{n:"Telemundo",c:"لاتيني",d:"مسلسلات إسبانية في أمريكا",u:"https://www.telemundo.com",l:"telemundo.com"},
+{n:"Televisa",c:"مكسيكي",d:"المسلسلات اللاتينية من المكسيك",u:"https://televisa.com",l:"televisa.com"},
+{n:"Sundance TV",c:"أمريكي",d:"مسلسلات مستقلة وجريئة",u:"https://www.sundance.tv",l:"sundance.tv"},
+{n:"OWN Network",c:"أمريكي",d:"قناة أوبرا وينفري للدراما",u:"https://www.owntv.com",l:"owntv.com"},
+{n:"Walter Presents",c:"أوروبي",d:"المسلسلات الأوروبية المترجمة",u:"https://www.channel4.com",l:"channel4.com"},
+{n:"MUBI",c:"دولي",d:"أفلام فنية مستقلة وكلاسيكية",u:"https://mubi.com",l:"mubi.com"},
+{n:"ABS-CBN",c:"فلبيني",d:"القناة الفلبينية الأبرز للدراما",u:"https://www.abs-cbn.com",l:"abs-cbn.com"},
+{n:"RCTI",c:"إندونيسي",d:"RCTI الإندونيسية للترفيه والدراما",u:"https://www.rctiplus.com",l:"rctiplus.com"},
+{n:"Altbalaji",c:"هندي",d:"مسلسلات هندية جريئة وأصيلة",u:"https://www.altbalaji.com",l:"altbalaji.com"},
+{n:"RTP Portugal",c:"برتغالي",d:"القناة البرتغالية الرسمية",u:"https://www.rtp.pt",l:"rtp.pt"},
+{n:"Tubi TV",c:"أمريكي",d:"أفلام ومسلسلات مجانية",u:"https://tubitv.com",l:"tubitv.com"},
+{n:"Digiturk Play",c:"تركي",d:"منصة Digiturk التركية الحصرية",u:"https://www.digiturk.com.tr",l:"digiturk.com.tr"},
+{n:"Vidio Indonesia",c:"إندونيسي",d:"منصة Vidio الإندونيسية",u:"https://www.vidio.com",l:"vidio.com"},
+{n:"Line TV",c:"تايلاندي",d:"مسلسلات Line التايلاندية",u:"https://www.linetv.tw",l:"linetv.tw"},
+],
+action:[
+{n:"HBO Action",c:"أمريكي",d:"قناة HBO لأفلام الأكشن الحصرية",u:"https://www.hbo.com",l:"hbo.com"},
+{n:"Syfy",c:"أمريكي",d:"خيال علمي وأكشن Sci-Fi",u:"https://www.syfy.com",l:"syfy.com"},
+{n:"TNT",c:"أمريكي",d:"الأكشن والدراما الأمريكية الكبرى",u:"https://www.tntdrama.com",l:"tntdrama.com"},
+{n:"USA Network",c:"أمريكي",d:"مسلسلات الأكشن والإثارة",u:"https://www.usanetwork.com",l:"usanetwork.com"},
+{n:"AXN",c:"دولي",d:"الأكشن والإثارة وأفلام الجريمة",u:"https://www.axn-asia.com",l:"axn-asia.com"},
+{n:"MBC Action",c:"عربي",d:"أفلام الأكشن والمغامرات بالعربية",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"OSN Action",c:"عربي",d:"قناة OSN للأكشن والإثارة",u:"https://www.osn.com",l:"osn.com"},
+{n:"beIN Movies Action",c:"عربي",d:"أفلام أكشن حصرية على beIN",u:"https://www.beinsports.com",l:"beinsports.com"},
+{n:"Rotana Cinema",c:"عربي",d:"أفلام عربية وأجنبية مدبلجة",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"Fox Action Movies",c:"دولي",d:"أضخم أفلام أكشن FOX",u:"https://www.foxmovies.com",l:"foxmovies.com"},
+{n:"Paramount Network",c:"أمريكي",d:"Paramount للأكشن والإثارة",u:"https://www.paramountnetwork.com",l:"paramountnetwork.com"},
+{n:"Lionsgate+",c:"أمريكي",d:"أفلام Lionsgate الحصرية",u:"https://www.lionsgateplus.com",l:"lionsgateplus.com"},
+{n:"TCM",c:"أمريكي",d:"الكلاسيكيات الأمريكية التاريخية",u:"https://www.tcm.com",l:"tcm.com"},
+{n:"AMC",c:"أمريكي",d:"Walking Dead وبطولات AMC",u:"https://www.amc.com",l:"amc.com"},
+{n:"Freeform",c:"أمريكي",d:"أكشن ومغامرات للشباب",u:"https://www.freeform.com",l:"freeform.com"},
+{n:"TBS",c:"أمريكي",d:"أفلام كوميديا وأكشن كبرى",u:"https://www.tbs.com",l:"tbs.com"},
+{n:"Sky Cinema Action",c:"بريطاني",d:"أفلام الأكشن على Sky Cinema",u:"https://www.sky.com",l:"sky.com"},
+{n:"Film4",c:"بريطاني",d:"قناة Film4 للأفلام البريطانية الكبرى",u:"https://www.channel4.com",l:"channel4.com"},
+{n:"Universal Pictures",c:"أمريكي",d:"ترسانة Universal الضخمة",u:"https://www.universalpictures.com",l:"universalpictures.com"},
+{n:"WWE Network",c:"أمريكي",d:"المصارعة الحرة WWE رسمياً",u:"https://www.wwe.com",l:"wwe.com"},
+{n:"AEW",c:"أمريكي",d:"منصة AEW للمصارعة الاحترافية",u:"https://www.allelitewrestling.com",l:"allelitewrestling.com"},
+{n:"UFC Fight Pass",c:"دولي",d:"منصة UFC الرسمية الحصرية",u:"https://ufcfightpass.com",l:"ufc.com"},
+{n:"Bellator MMA",c:"دولي",d:"فنون قتالية مختلطة MMA",u:"https://www.bellator.com",l:"bellator.com"},
+{n:"ONE Championship",c:"آسيوي",d:"أكبر منظمة MMA في آسيا",u:"https://www.onefc.com",l:"onefc.com"},
+{n:"NJPW World",c:"ياباني",d:"المصارعة اليابانية الاحترافية",u:"https://njpwworld.com",l:"njpwworld.com"},
+{n:"Disney XD",c:"دولي",d:"أكشن وخيال علمي للشباب",u:"https://www.disneyplus.com",l:"disneyplus.com"},
+{n:"Adult Swim",c:"أمريكي",d:"الأكشن والكوميديا للبالغين",u:"https://www.adultswim.com",l:"adultswim.com"},
+{n:"Funimation",c:"ياباني",d:"أنمي أكشن مدبلج بالإنجليزية",u:"https://www.funimation.com",l:"funimation.com"},
+{n:"Crunchyroll",c:"ياباني",d:"أنمي أكشن وإثارة ياباني",u:"https://www.crunchyroll.com",l:"crunchyroll.com"},
+{n:"HIDIVE",c:"ياباني",d:"أنمي خيال علمي وأكشن",u:"https://www.hidive.com",l:"hidive.com"},
+{n:"Shudder",c:"أمريكي",d:"رعب وإثارة وأكشن مظلم",u:"https://www.shudder.com",l:"shudder.com"},
+{n:"Discovery Channel",c:"دولي",d:"مغامرات واكتشافات مثيرة",u:"https://www.discovery.com",l:"discovery.com"},
+{n:"National Geographic",c:"دولي",d:"وثائقيات ومغامرات علمية",u:"https://www.nationalgeographic.com",l:"nationalgeographic.com"},
+{n:"Nat Geo Wild",c:"دولي",d:"عالم الحيوانات والمغامرات",u:"https://www.nationalgeographic.com",l:"nationalgeographic.com"},
+{n:"Animal Planet",c:"دولي",d:"مغامرات الحيوانات المثيرة",u:"https://www.animalplanet.com",l:"animalplanet.com"},
+{n:"History Channel",c:"دولي",d:"التاريخ والمغامرات الحربية",u:"https://www.history.com",l:"history.com"},
+{n:"Smithsonian Channel",c:"دولي",d:"العلوم والتاريخ والمغامرات",u:"https://www.smithsonianchannel.com",l:"smithsonianchannel.com"},
+{n:"Crime Investigation",c:"دولي",d:"الجريمة والتحقيقات الجنائية",u:"https://www.crimeandinvestigation.co.uk",l:"crimeandinvestigation.co.uk"},
+{n:"Red Bull TV",c:"دولي",d:"رياضات جريئة ومغامرات حصرية",u:"https://www.redbull.com/tv",l:"redbull.com"},
+{n:"Extreme Sports Ch",c:"دولي",d:"أقصى حدود الرياضات المتطرفة",u:"https://www.extremesportschannel.com",l:"extremesportschannel.com"},
+{n:"XGames",c:"أمريكي",d:"بطولة X Games العالمية",u:"https://www.xgames.com",l:"xgames.com"},
+{n:"World Surf League",c:"دولي",d:"بطولة ركوب الأمواج العالمية",u:"https://www.worldsurfleague.com",l:"worldsurfleague.com"},
+{n:"BFI Player",c:"بريطاني",d:"الأفلام البريطانية الكلاسيكية",u:"https://player.bfi.org.uk",l:"bfi.org.uk"},
+{n:"MUBI",c:"دولي",d:"أفلام مستقلة وكلاسيكية فنية",u:"https://mubi.com",l:"mubi.com"},
+{n:"Criterion Channel",c:"دولي",d:"أرقى الأفلام الفنية الكلاسيكية",u:"https://www.criterionchannel.com",l:"criterionchannel.com"},
+{n:"A24",c:"أمريكي",d:"أرقى الأفلام المستقلة الجريئة",u:"https://a24films.com",l:"a24films.com"},
+{n:"Tubi TV",c:"أمريكي",d:"آلاف أفلام الأكشن مجاناً",u:"https://tubitv.com",l:"tubitv.com"},
+{n:"Pluto TV",c:"أمريكي",d:"بث مجاني لقنوات الأكشن",u:"https://pluto.tv",l:"pluto.tv"},
+{n:"Plex TV",c:"أمريكي",d:"بث مجاني وإدارة الأفلام",u:"https://www.plex.tv",l:"plex.tv"},
+{n:"MGM+",c:"أمريكي",d:"أفلام MGM الحصرية الكبرى",u:"https://www.mgmplus.com",l:"mgmplus.com"},
+{n:"Sony Action",c:"دولي",d:"ترسانة أفلام Sony الضخمة",u:"https://www.sonyliv.com",l:"sonyliv.com"},
+{n:"Canal+ Cinema",c:"فرنسي",d:"السينما الفرنسية الحصرية",u:"https://www.canalplus.com",l:"canalplus.com"},
+{n:"Neon Movies",c:"أمريكي",d:"أفلام NEON الجائزة",u:"https://www.neonstudios.com",l:"neonstudios.com"},
+{n:"IFC Films",c:"أمريكي",d:"أفلام IFC المستقلة",u:"https://www.ifcfilms.com",l:"ifcfilms.com"},
+{n:"GoPro Channel",c:"دولي",d:"مغامرات مستخدمي GoPro",u:"https://gopro.com",l:"gopro.com"},
+{n:"Arrow Video",c:"دولي",d:"أفلام كلاسيكية وأكشن نادر",u:"https://www.arrow-player.com",l:"arrow-player.com"},
+{n:"Screambox",c:"أمريكي",d:"رعب وإثارة متخصص",u:"https://screambox.com",l:"screambox.com"},
+{n:"Kanopy",c:"دولي",d:"أفلام مجانية عبر المكتبات",u:"https://www.kanopy.com",l:"kanopy.com"},
+{n:"Fandango",c:"أمريكي",d:"عروض الأفلام السينمائية",u:"https://www.fandango.com",l:"fandango.com"},
+{n:"Vudu",c:"أمريكي",d:"تأجير وشراء أفلام الأكشن",u:"https://www.vudu.com",l:"vudu.com"},
+{n:"FilmRise",c:"أمريكي",d:"أفلام مستقلة وأكشن كلاسيكي",u:"https://www.filmrise.com",l:"filmrise.com"},
+{n:"Outdoor Channel",c:"أمريكي",d:"مغامرات خارجية وصيد",u:"https://www.outdoorchannel.com",l:"outdoorchannel.com"},
+{n:"Redbox",c:"أمريكي",d:"تأجير أفلام رقمي",u:"https://www.redbox.com",l:"redbox.com"},
+{n:"ScreenPix",c:"أمريكي",d:"أفلام كلاسيكية أمريكية",u:"https://screenpix.com",l:"screenpix.com"},
+{n:"Impact Wrestling",c:"أمريكي",d:"مصارعة احترافية Impact",u:"https://www.impactwrestling.com",l:"impactwrestling.com"},
+{n:"ODEON Cinemas",c:"بريطاني",d:"سينما ODEON البريطانية الكبرى",u:"https://www.odeon.co.uk",l:"odeon.co.uk"},
+{n:"Vue Cinemas",c:"أوروبي",d:"سلسلة سينما Vue الأوروبية",u:"https://www.myvue.com",l:"myvue.com"},
+{n:"AMC Theatres",c:"أمريكي",d:"سينما AMC الأمريكية الكبرى",u:"https://www.amctheatres.com",l:"amctheatres.com"},
+{n:"Regal Cinemas",c:"أمريكي",d:"سلسلة سينما Regal الأمريكية",u:"https://www.regmovies.com",l:"regmovies.com"},
+{n:"Cineworld",c:"بريطاني",d:"سينما Cineworld البريطانية",u:"https://www.cineworld.co.uk",l:"cineworld.co.uk"},
+{n:"Lotte Cinema",c:"كوري",d:"سينما Lotte الكورية الكبرى",u:"https://www.lottecinema.co.kr",l:"lottecinema.co.kr"},
+{n:"Magnolia Pictures",c:"أمريكي",d:"أفلام مستقلة ووثائقيات",u:"https://www.magpictures.com",l:"magpictures.com"},
+{n:"Kino Lorber",c:"دولي",d:"سينما دولية رفيعة المستوى",u:"https://www.kinolorber.com",l:"kinolorber.com"},
+],
+misc:[
+{n:"Al Jazeera",c:"أخبار",d:"الجزيرة الإخبارية العالمية",u:"https://www.aljazeera.net",l:"aljazeera.net"},
+{n:"Al Jazeera English",c:"أخبار",d:"الجزيرة الدولية بالإنجليزية",u:"https://www.aljazeera.com",l:"aljazeera.com"},
+{n:"BBC Arabic",c:"أخبار",d:"BBC العربية للأخبار والبرامج",u:"https://www.bbc.com/arabic",l:"bbc.com"},
+{n:"BBC World News",c:"أخبار",d:"BBC الدولية للأخبار العالمية",u:"https://www.bbc.com/news",l:"bbc.com"},
+{n:"CNN",c:"أخبار",d:"قناة CNN الأمريكية العالمية",u:"https://www.cnn.com",l:"cnn.com"},
+{n:"CNN Arabic",c:"أخبار",d:"CNN بالعربية للأخبار",u:"https://arabic.cnn.com",l:"cnn.com"},
+{n:"Fox News",c:"أخبار",d:"الأخبار الأمريكية على Fox",u:"https://www.foxnews.com",l:"foxnews.com"},
+{n:"France 24",c:"أخبار",d:"القناة الفرنسية الدولية",u:"https://www.france24.com",l:"france24.com"},
+{n:"France 24 Arabic",c:"أخبار",d:"France 24 بالعربية",u:"https://www.france24.com/ar",l:"france24.com"},
+{n:"DW Arabic",c:"أخبار",d:"Deutsche Welle بالعربية",u:"https://www.dw.com/ar",l:"dw.com"},
+{n:"Sky News Arabia",c:"أخبار",d:"Sky News للعالم العربي",u:"https://www.skynewsarabia.com",l:"skynewsarabia.com"},
+{n:"Sky News UK",c:"أخبار",d:"أخبار بريطانيا على Sky",u:"https://www.skynews.com",l:"skynews.com"},
+{n:"Euronews",c:"أخبار",d:"أخبار أوروبا متعددة اللغات",u:"https://www.euronews.com",l:"euronews.com"},
+{n:"Al Arabiya",c:"أخبار",d:"قناة العربية الإخبارية السريعة",u:"https://www.alarabiya.net",l:"alarabiya.net"},
+{n:"Al Hadath",c:"أخبار",d:"قناة الحدث الإخبارية المتسارعة",u:"https://www.alarabiya.net",l:"alarabiya.net"},
+{n:"CGTN",c:"أخبار",d:"القناة الصينية الدولية",u:"https://www.cgtn.com",l:"cgtn.com"},
+{n:"NHK World",c:"أخبار",d:"اليابان للعالم أخباراً وثقافة",u:"https://www3.nhk.or.jp/nhkworld",l:"nhk.or.jp"},
+{n:"TRT World",c:"أخبار",d:"تركيا للعالم بالإنجليزية",u:"https://www.trtworld.com",l:"trtworld.com"},
+{n:"RT Arabic",c:"أخبار",d:"Russia Today بالعربية",u:"https://arabic.rt.com",l:"rt.com"},
+{n:"Al Mayadeen",c:"أخبار",d:"الميادين للتحليل السياسي",u:"https://www.almayadeen.net",l:"almayadeen.net"},
+{n:"MSNBC",c:"أخبار",d:"أخبار سياسية أمريكية",u:"https://www.msnbc.com",l:"msnbc.com"},
+{n:"NBC News",c:"أخبار",d:"NBC للأخبار الأمريكية",u:"https://www.nbcnews.com",l:"nbcnews.com"},
+{n:"GEO TV",c:"أخبار",d:"جيو الباكستانية للأخبار",u:"https://www.geo.tv",l:"geo.tv"},
+{n:"ARY News",c:"أخبار",d:"ARY الباكستانية الإخبارية",u:"https://arynews.tv",l:"arynews.tv"},
+{n:"NDTV",c:"أخبار",d:"أخبار هندية على NDTV",u:"https://www.ndtv.com",l:"ndtv.com"},
+{n:"Zee News",c:"أخبار",d:"Zee الإخبارية الهندية",u:"https://zeenews.india.com",l:"zeenews.india.com"},
+{n:"Press TV",c:"أخبار",d:"إيران للعالم بالإنجليزية",u:"https://www.presstv.ir",l:"presstv.ir"},
+{n:"Disney Channel",c:"أطفال",d:"قناة ديزني الشاملة للأطفال",u:"https://www.disneyplus.com",l:"disneyplus.com"},
+{n:"Cartoon Network",c:"أطفال",d:"كارتون نيتورك للأطفال",u:"https://www.cartoonnetwork.com",l:"cartoonnetwork.com"},
+{n:"Nickelodeon",c:"أطفال",d:"Nickelodeon للأطفال والمراهقين",u:"https://www.nick.com",l:"nick.com"},
+{n:"Nick Jr",c:"أطفال",d:"Nick Jr لصغار الأطفال",u:"https://www.nickjr.com",l:"nickjr.com"},
+{n:"CBeebies",c:"أطفال",d:"BBC للأطفال الصغار",u:"https://www.bbc.co.uk/cbeebies",l:"bbc.co.uk"},
+{n:"Disney Junior",c:"أطفال",d:"ديزني لأصغر المشاهدين",u:"https://www.disneyplus.com",l:"disneyplus.com"},
+{n:"PBS Kids",c:"أطفال",d:"تعليمي أمريكي للأطفال",u:"https://pbskids.org",l:"pbskids.org"},
+{n:"Boomerang",c:"أطفال",d:"كرتون كلاسيكي للأطفال",u:"https://www.boomerang.com",l:"boomerang.com"},
+{n:"Spacetoon",c:"أطفال",d:"سبيستون للأطفال العرب",u:"https://www.spacetoon.com",l:"spacetoon.com"},
+{n:"Baraem",c:"أطفال",d:"قناة براعم للأطفال الصغار",u:"https://www.baraem.tv",l:"baraem.tv"},
+{n:"Jeem TV",c:"أطفال",d:"جيم للأطفال العرب من قطر",u:"https://www.jeemtv.net",l:"jeemtv.net"},
+{n:"Kika Germany",c:"أطفال",d:"KiKa الألمانية للأطفال",u:"https://www.kika.de",l:"kika.de"},
+{n:"Gulli",c:"أطفال",d:"Gulli الفرنسية للأطفال",u:"https://www.gulli.fr",l:"gulli.fr"},
+{n:"RAI Yoyo",c:"أطفال",d:"RAI الإيطالية للأطفال",u:"https://www.rai.it",l:"rai.it"},
+{n:"YouTube",c:"منوعات",d:"المنصة الأكبر للفيديو عالمياً",u:"https://www.youtube.com",l:"youtube.com"},
+{n:"YouTube Kids",c:"أطفال",d:"يوتيوب الآمن للأطفال",u:"https://www.youtubekids.com",l:"youtube.com"},
+{n:"TikTok",c:"منوعات",d:"فيديو قصير من كل العالم",u:"https://www.tiktok.com",l:"tiktok.com"},
+{n:"Twitch",c:"منوعات",d:"بث مباشر للألعاب والترفيه",u:"https://www.twitch.tv",l:"twitch.tv"},
+{n:"Kick",c:"منوعات",d:"منصة Kick للبث المباشر",u:"https://kick.com",l:"kick.com"},
+{n:"Spotify",c:"موسيقى",d:"منصة الموسيقى الأكبر عالمياً",u:"https://www.spotify.com",l:"spotify.com"},
+{n:"Apple Music",c:"موسيقى",d:"موسيقى Apple وبودكاست",u:"https://music.apple.com",l:"apple.com"},
+{n:"Anghami",c:"موسيقى",d:"أنغامي للموسيقى العربية",u:"https://www.anghami.com",l:"anghami.com"},
+{n:"Deezer",c:"موسيقى",d:"Deezer لبث الموسيقى",u:"https://www.deezer.com",l:"deezer.com"},
+{n:"SoundCloud",c:"موسيقى",d:"SoundCloud للمستقلين والفنانين",u:"https://soundcloud.com",l:"soundcloud.com"},
+{n:"MTV",c:"موسيقى",d:"MTV الأشهر للموسيقى والترفيه",u:"https://www.mtv.com",l:"mtv.com"},
+{n:"Mazzika",c:"موسيقى",d:"مزيكا للموسيقى العربية",u:"https://www.mazzika.com",l:"mazzika.com"},
+{n:"Melody",c:"موسيقى",d:"ميلودي للأغاني العربية",u:"https://www.melody4arab.com",l:"melody4arab.com"},
+{n:"Rotana Khalijiyah",c:"موسيقى",d:"أغاني خليجية على روتانا",u:"https://www.rotana.net",l:"rotana.net"},
+{n:"MBC Masr",c:"مصري",d:"MBC مصر للترفيه المصري",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"MBC 3",c:"أطفال",d:"MBC للأطفال والبرامج التعليمية",u:"https://www.mbc.net",l:"mbc.net"},
+{n:"Abu Dhabi TV",c:"خليجي",d:"قناة أبوظبي للترفيه والبرامج",u:"https://abudhabi.ae",l:"abudhabi.ae"},
+{n:"Dubai TV",c:"خليجي",d:"قناة دبي التلفزيونية للترفيه",u:"https://www.dubaimedia.ae",l:"dubaimedia.ae"},
+{n:"Kuwait TV",c:"خليجي",d:"التلفزيون الكويتي الرسمي",u:"https://www.media.gov.kw",l:"media.gov.kw"},
+{n:"LBC Lebanon",c:"لبناني",d:"LBC لبنان للترفيه والأخبار",u:"https://www.lbcgroup.tv",l:"lbcgroup.tv"},
+{n:"MTV Lebanon",c:"لبناني",d:"MTV لبنان للموسيقى والترفيه",u:"https://www.mtv.com.lb",l:"mtv.com.lb"},
+{n:"Al Jadeed",c:"لبناني",d:"الجديد اللبنانية للأخبار",u:"https://www.aljadeed.tv",l:"aljadeed.tv"},
+{n:"2M Maroc",c:"مغاربي",d:"القناة الثانية المغربية",u:"https://www.2m.ma",l:"2m.ma"},
+{n:"SNRT",c:"مغاربي",d:"البث الوطني المغربي الرسمي",u:"https://www.snrt.ma",l:"snrt.ma"},
+{n:"Echorouk TV",c:"مغاربي",d:"الشروق الجزائرية الترفيهية",u:"https://www.echoroukonline.com",l:"echoroukonline.com"},
+{n:"Watania Tunisia",c:"مغاربي",d:"الوطنية التونسية الرسمية",u:"https://www.watania1.tn",l:"watania1.tn"},
+{n:"BBC Earth",c:"وثائقي",d:"وثائقيات طبيعة BBC الرائعة",u:"https://www.bbcearth.com",l:"bbcearth.com"},
+{n:"Discovery Science",c:"وثائقي",d:"العلوم والتكنولوجيا على Discovery",u:"https://www.discoveryplus.com",l:"discoveryplus.com"},
+{n:"Comedy Central",c:"ترفيه",d:"كوميديا ساخرة أمريكية",u:"https://www.comedycentral.com",l:"comedycentral.com"},
+{n:"BET",c:"ترفيه",d:"BET للموسيقى والترفيه",u:"https://www.bet.com",l:"bet.com"},
+{n:"VH1",c:"ترفيه",d:"VH1 للموسيقى والبرامج الترفيهية",u:"https://www.vh1.com",l:"vh1.com"},
+{n:"TLC",c:"ترفيه",d:"TLC لبرامج الواقع الشعبية",u:"https://www.tlc.com",l:"tlc.com"},
+{n:"TV5 Monde",c:"ثقافة",d:"قناة فرنكوفونية ثقافية",u:"https://www.tv5monde.com",l:"tv5monde.com"},
+{n:"Arte",c:"ثقافة",d:"الثقافة الأوروبية الراقية",u:"https://www.arte.tv",l:"arte.tv"},
+{n:"Iqra",c:"ديني",d:"قناة اقرأ الإسلامية التعليمية",u:"https://www.iqraa.com",l:"iqraa.com"},
+{n:"Al Rahma",c:"ديني",d:"قناة الرحمة الدينية الإسلامية",u:"https://www.alrahmatv.com",l:"alrahmatv.com"},
+{n:"Huda TV",c:"ديني",d:"قناة Huda الإسلامية الدولية",u:"https://www.huda.tv",l:"huda.tv"},
+{n:"Al Nas",c:"ديني",d:"قناة الناس الدينية المصرية",u:"https://www.annasetv.com",l:"annasetv.com"},
+{n:"Hum TV",c:"باكستاني",d:"HUM TV للمسلسلات الباكستانية",u:"https://www.humtv.com.pk",l:"humtv.com.pk"},
+{n:"GEO Entertainment",c:"باكستاني",d:"جيو الترفيهية الباكستانية",u:"https://www.geo.tv",l:"geo.tv"},
+{n:"Dailymotion",c:"منوعات",d:"منصة فيديو فرنسية بديلة",u:"https://www.dailymotion.com",l:"dailymotion.com"},
+{n:"Rumble",c:"منوعات",d:"منصة Rumble للفيديو المستقل",u:"https://rumble.com",l:"rumble.com"},
+{n:"Pluto TV",c:"منوعات",d:"قنوات وبث مجاني متنوع",u:"https://pluto.tv",l:"pluto.tv"},
+{n:"Jordan TV",c:"عربي",d:"التلفزيون الأردني الرسمي",u:"https://www.jrtv.jo",l:"jrtv.jo"},
+{n:"KTV Kuwait",c:"خليجي",d:"قناة الكويت للترفيه والبرامج",u:"https://www.media.gov.kw",l:"media.gov.kw"},
+{n:"OTV Lebanon",c:"لبناني",d:"OTV اللبنانية للأخبار والترفيه",u:"https://www.otv.com.lb",l:"otv.com.lb"},
+]
+};
+
+// ---- CURSOR (desktop only) ----
+(function initCursor() {
+  const c = document.getElementById('cur');
+  const cr = document.getElementById('curR');
+  if (!c || !cr) return;
+  if (window.matchMedia('(pointer: fine)').matches) {
+    document.addEventListener('mousemove', e => {
+      c.style.left  = e.clientX + 'px';
+      c.style.top   = e.clientY + 'px';
+      setTimeout(() => {
+        cr.style.left = e.clientX + 'px';
+        cr.style.top  = e.clientY + 'px';
+      }, 80);
+    });
+    document.addEventListener('mousedown', () => c.style.transform = 'translate(-50%,-50%) scale(2.5)');
+    document.addEventListener('mouseup',   () => c.style.transform = 'translate(-50%,-50%) scale(1)');
+  }
+})();
+
+// ---- BUILD CARDS ----
+function build() {
+  ['sport','drama','action','misc'].forEach(s => {
+    const g = document.getElementById('grid-' + s);
+    g.innerHTML = D[s].map((ch, i) => `
+      <a href="${ch.u}" target="_blank" rel="noopener" class="card ${s}-card" style="animation-delay:${i * .025}s">
+        <div class="card-glow"></div>
+        <div class="card-inner">
+          <div class="cla">
+            <img class="cla-img"
+              src="https://logo.clearbit.com/${ch.l}"
+              alt="${ch.n}"
+              loading="lazy"
+              onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+            <div class="cla-fb">
+              <img
+                src="https://www.google.com/s2/favicons?sz=128&domain=${ch.l}"
+                alt="${ch.n}"
+                loading="lazy"
+                onerror="this.parentElement.innerHTML='<span style=font-size:2rem;font-weight:700;color:#fff>${ch.n.charAt(0)}</span>'">
+            </div>
+          </div>
+          <div class="cbody">
+            <div class="cname">${ch.n}</div>
+            <div class="ccat"><span class="cdot"></span>${ch.c}</div>
+            <div class="cdesc">${ch.d}</div>
+          </div>
+          <div class="cfoot">
+            <div class="cvisit">زيارة الموقع <span class="cvisit-arr">←</span></div>
+            <span class="ctag">رابط رسمي</span>
+          </div>
+        </div>
+      </a>`).join('');
+  });
+}
+
+// ---- SECTION SWITCHING ----
+let curS = 'sport';
+
+function showSec(id, el, type) {
+  curS = id;
+
+  // sections
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+
+  // switcher buttons (desktop)
+  document.querySelectorAll('.sw').forEach(b => b.classList.remove('active'));
+  const swMap = {sport:'.sport-sw', drama:'.drama-sw', action:'.action-sw', misc:'.misc-sw'};
+  document.querySelector(swMap[id])?.classList.add('active');
+
+  // header nav (desktop)
+  document.querySelectorAll('.hn').forEach(a => a.classList.remove('active'));
+  const hnMap = {sport:'.hs', drama:'.hd', action:'.ha', misc:'.hm'};
+  document.querySelector(hnMap[id])?.classList.add('active');
+
+  // mobile nav
+  document.querySelectorAll('.mn-btn').forEach(b => b.classList.remove('active'));
+  const mnMap = {sport:'.sport-mn', drama:'.drama-mn', action:'.action-mn', misc:'.misc-mn'};
+  document.querySelector(mnMap[id])?.classList.add('active');
+
+  // clear search
+  const si = document.getElementById('si');
+  const msi = document.getElementById('msi');
+  if (si)  si.value  = '';
+  if (msi) msi.value = '';
+
+  document.querySelectorAll('.card').forEach(c => c.classList.remove('hidden'));
+  document.getElementById('no-results').style.display = 'none';
+
+  // scroll
+  const sw = document.querySelector('.switcher') || document.querySelector('.mobile-search');
+  if (sw) {
+    window.scrollTo({ top: sw.offsetTop - 80, behavior: 'smooth' });
+  }
+}
+
+// ---- SEARCH ----
+function doSearch(val) {
+  const q = (val !== undefined ? val : document.getElementById('si')?.value || '').toLowerCase().trim();
+  let total = 0;
+
+  // sync both inputs
+  const si  = document.getElementById('si');
+  const msi = document.getElementById('msi');
+  if (si  && si.value  !== q) si.value  = q;
+  if (msi && msi.value !== q) msi.value = q;
+
+  if (!q) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('hidden'));
+    document.getElementById('no-results').style.display = 'none';
+    return;
+  }
+
+  // show all sections while searching
+  document.querySelectorAll('.section').forEach(s => s.classList.add('active'));
+
+  ['sport','drama','action','misc'].forEach(s => {
+    const cards = document.querySelectorAll(`#grid-${s} .card`);
+    cards.forEach((card, i) => {
+      const ch = D[s][i];
+      const ok = ch && (
+        ch.n.toLowerCase().includes(q) ||
+        ch.c.toLowerCase().includes(q) ||
+        ch.d.toLowerCase().includes(q)
+      );
+      card.classList.toggle('hidden', !ok);
+      if (ok) total++;
+    });
+  });
+
+  document.getElementById('no-results').style.display = total === 0 ? 'block' : 'none';
+}
+
+// ---- SCROLL TOP ----
+window.addEventListener('scroll', () => {
+  document.getElementById('st').classList.toggle('show', scrollY > 400);
+});
+
+// ---- INIT ----
+document.addEventListener('DOMContentLoaded', build);
+
+</script>
+</body>
+</html>
